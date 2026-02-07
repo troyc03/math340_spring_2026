@@ -40,7 +40,8 @@ print(f"The fixed point for g_2(x) is approximately: {fixed_point2:.4f}")
 print(f"The fixed point for g_3(x) is approximately: {fixed_point3:.4f}")
 print(f"The fixed point for g_4(x) is approximately: {fixed_point4:.4f}")
 print("-" * 40)
-# Exercise 2
+
+# Exercise 3
 def my_bisection_iterative(f, a, b, tol):
     if np.sign(f(a)) == np.sign(f(b)):
         raise Exception("The scalars a and b do not bound a root.")
