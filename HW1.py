@@ -79,3 +79,35 @@ b = float(input("Enter the value for b: "))
 r001, err001 = my_bisection_iterative(f, a, b, 0.001)
 
 print(f"r001 = {r001:.4f}, error_bound = {err001:.4f}")
+print(40 * "-")
+
+# Exercise 4
+def my_bisection_recursive(f, a, b, tol):
+    if np.sign(f(a)) == np.sign(f(b)):
+        raise Exception("The scalars a and b do not bound a root.")
+        
+    if f(a)*f(b) < 0:
+        print(f"We can apply the IVT on {a} and {b}")
+    elif f(a)*f(b) > 0:
+        print(f"We cannot apply the IVT on {a} and {b}")
+    
+    # Base case: if the width of the interval is less than or equal to 2*tol
+    if (b - a) / 2 <= tol:
+        approx_root = (a + b) / 2
+        error_bound = (b - a) / 2
+        return approx_root, error_bound
+    
+    m = (a + b) / 2
+    if f(m) == 0:
+        return m, 0
+    elif np.sign(f(a)) == np.sign(f(m)):
+        return my_bisection_recursive(f, m, b, tol)
+    else:
+        return my_bisection_recursive(f, a, m, tol)
+    
+    # Example usage
+f = lambda x: np.sqrt(x) - np.cos(x)
+a = float(input("Enter the value for a: "))
+b = float(input("Enter the value for b: "))
+r001, err001 = my_bisection_recursive(f, a, b, 0.001)
+print(f"r001 = {r001:.4f}, error_bound = {err001:.4f}")
