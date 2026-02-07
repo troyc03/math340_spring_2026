@@ -106,7 +106,7 @@ def my_bisection_recursive(f, a, b, tol):
         return my_bisection_recursive(f, a, m, tol)
     
     # Example usage
-f = lambda x: np.sqrt(x) - np.cos(x)
+f = lambda x: x**4-2*x**3-4*x**2+4*x+4
 a = float(input("Enter the value for a: "))
 b = float(input("Enter the value for b: "))
 r001, err001 = my_bisection_recursive(f, a, b, 0.001)
