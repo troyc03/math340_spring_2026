@@ -111,3 +111,4 @@ a = float(input("Enter the value for a: "))
 b = float(input("Enter the value for b: "))
 r001, err001 = my_bisection_recursive(f, a, b, 0.001)
 print(f"r001 = {r001:.4f}, error_bound = {err001:.4f}")
+
