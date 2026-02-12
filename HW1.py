@@ -61,6 +61,11 @@ g6_b = lambda x: (2*x + 5)**(1/3)
 root6_b, iters6_b = fixed_point(g6_b, 2.5, tol=1e-5)
 print(f"Exercise 6(b): Root = {root6_b:.5f} in {iters6_b} iterations")
 
+# c) g(x) = 3x^2-e^x = 0 => x = (e^x / 3)^(1/2)
+g6_c = lambda x: (np.exp(x) / 3)**0.5
+root6_c, iters6_c = fixed_point(g6_c, 1.0, tol=1e-5)
+print(f"Exercise 6(c): Root = {root6_c:.5f} in {iters6_c} iterations")
+
 # d) x - cos(x) = 0 => g(x) = cos(x) 
 g6_d = lambda x: np.cos(x)
 root6_d, iters6_d = fixed_point(g6_d, 0.5, tol=1e-5)
