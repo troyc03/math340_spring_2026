@@ -1,114 +1,67 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Wed Feb  4 11:42:19 2026
-
-@author: Troy
-"""
-
-# Exercise 5
-
 import numpy as np
 
 def fixed_point(f, x0, tol=1e-5, max_iter=1000):
-    # Previous guess
     x_prev = x0
-    # Iterate over maximum iterations
     for i in range(max_iter):
         x_curr = f(x_prev)
-        
-        # If the error is less than the tolerance, then it will converge.
         if np.abs(x_curr - x_prev) < tol:
-            print(f"Converged in {i+1} iterations.")
-            return x_curr
+            return x_curr, i + 1
         x_prev = x_curr
-    print("Max iterations reached. No convergence outside of the root.")
-    return x_curr
+    return x_curr, max_iter
 
-# Example usage
-g_func1 = lambda x: (3+x-2*x**2)**(1/4)
-g_func2 = lambda x: ((x+3-x**4)/2)**(1/2)
-g_func3 = lambda x: ((x+3)/(x**2+2))**(1/2)
-g_func4 = lambda x: (3*x**4+2*x**2+3)/(4*x**3+4*x-1)
-initial_guess = 1
-
-fixed_point1 = fixed_point(g_func1, initial_guess)
-fixed_point2 = fixed_point(g_func2, initial_guess)
-fixed_point3 = fixed_point(g_func3, initial_guess)
-fixed_point4 = fixed_point(g_func4, initial_guess)
-print(f"The fixed point for g_1(x) is approximately: {fixed_point1:4f}")
-print(f"The fixed point for g_2(x) is approximately: {fixed_point2:.4f}")
-print(f"The fixed point for g_3(x) is approximately: {fixed_point3:.4f}")
-print(f"The fixed point for g_4(x) is approximately: {fixed_point4:.4f}")
-print("-" * 40)
-
-# Exercise 3
-def my_bisection_iterative(f, a, b, tol):
+def my_bisection_iterative(f, a, b, tol, max_steps=None):
     if np.sign(f(a)) == np.sign(f(b)):
         raise Exception("The scalars a and b do not bound a root.")
-        
-    if f(a)*f(b) < 0:
-        print(f"We can apply the IVT on {a} and {b}")
-    elif f(a)*f(b) > 0:
-        print(f"We cannot apply the IVT on {a} and {b}")
-        
-
-    # The condition is that the width of the interval should be greater than 2*tol
-    # or loop while the error bound (b-a)/2 is greater than tol.
+    
+    step = 0
     while (b - a) / 2 > tol:
+        step += 1
         m = (a + b) / 2
-        # Check if m is the root, or determine which half to continue in
         if f(m) == 0:
-            a = m
-            b = m
-            break
-        elif np.sign(f(a)) == np.sign(f(m)):
+            return m, 0
+        if np.sign(f(a)) == np.sign(f(m)):
             a = m
         else:
             b = m
-
+        if max_steps and step == max_steps:
+            break
+            
     approx_root = (a + b) / 2
-    # The error bound is half the width of the final interval
-    error_bound = (b - a) / 2
+    return approx_root, (b - a) / 2
 
-    return approx_root, error_bound
+# --- Exercise 3 Solutions ---
 
-f = lambda x: np.exp(x)-x**2+3*x-2
-a = float(input("Enter the value for a: "))
-b = float(input("Enter the value for b: "))
+# i) Find p3 for f(x) = sqrt(x) - cos(x) on [0, 1] 
+f3_i = lambda x: np.sqrt(x) - np.cos(x)
+p3, _ = my_bisection_iterative(f3_i, 0, 1, tol=0, max_steps=3)
+print(f"Exercise 3(i): p3 = {p3:.4f}")
 
-r001, err001 = my_bisection_iterative(f, a, b, 0.001)
+# ii) Solutions for x^4 - 2x^3 - 4x^2 + 4x + 4 = 0 
+f3_ii = lambda x: x**4 - 2*x**3 - 4*x**2 + 4*x + 4
+root1, err1 = my_bisection_iterative(f3_ii, -2, -1, 1e-2)
+root2, err2 = my_bisection_iterative(f3_ii, 2, 3, 1e-2)
+print(f"Exercise 3(ii): Root 1 = {root1:.4f}, Root 2 = {root2:.4f}")
 
-print(f"r001 = {r001:.4f}, error_bound = {err001:.4f}")
-print(40 * "-")
+# --- Exercise 4 Solution ---
 
-# Exercise 4
-def my_bisection_recursive(f, a, b, tol):
-    if np.sign(f(a)) == np.sign(f(b)):
-        raise Exception("The scalars a and b do not bound a root.")
-        
-    if f(a)*f(b) < 0:
-        print(f"We can apply the IVT on {a} and {b}")
-    elif f(a)*f(b) > 0:
-        print(f"We cannot apply the IVT on {a} and {b}")
-    
-    # Base case: if the width of the interval is less than or equal to 2*tol
-    if (b - a) / 2 <= tol:
-        approx_root = (a + b) / 2
-        error_bound = (b - a) / 2
-        return approx_root, error_bound
-    
-    m = (a + b) / 2
-    if f(m) == 0:
-        return m, 0
-    elif np.sign(f(a)) == np.sign(f(m)):
-        return my_bisection_recursive(f, m, b, tol)
-    else:
-        return my_bisection_recursive(f, a, m, tol)
-    
-    # Example usage
-f = lambda x: x**4-2*x**3-4*x**2+4*x+4
-a = float(input("Enter the value for a: "))
-b = float(input("Enter the value for b: "))
-r001, err001 = my_bisection_recursive(f, a, b, 0.001)
-print(f"r001 = {r001:.4f}, error_bound = {err001:.4f}")
+# Bisection for e^x - x^2 + 3x - 2 = 0 on [0, 1] 
+f4 = lambda x: np.exp(x) - x**2 + 3*x - 2
+root4, err4 = my_bisection_iterative(f4, 0, 1, 1e-5)
+print(f"Exercise 4: Root = {root4:.6f} (Error bound: {err4:.6e})")
 
+# --- Exercise 6 Solutions ---
+
+# a) 2 + sin(x) - x = 0 => g(x) = 2 + sin(x) on [2, 3] 
+g6_a = lambda x: 2 + np.sin(x)
+root6_a, iters6_a = fixed_point(g6_a, 2.5, tol=1e-5)
+print(f"Exercise 6(a): Root = {root6_a:.5f} in {iters6_a} iterations")
+
+# b) x^3 - 2x - 5 = 0 => g(x) = (2x + 5)^(1/3) on [2, 3] 
+g6_b = lambda x: (2*x + 5)**(1/3)
+root6_b, iters6_b = fixed_point(g6_b, 2.5, tol=1e-5)
+print(f"Exercise 6(b): Root = {root6_b:.5f} in {iters6_b} iterations")
+
+# d) x - cos(x) = 0 => g(x) = cos(x) 
+g6_d = lambda x: np.cos(x)
+root6_d, iters6_d = fixed_point(g6_d, 0.5, tol=1e-5)
+print(f"Exercise 6(d): Root = {root6_d:.5f} in {iters6_d} iterations")
