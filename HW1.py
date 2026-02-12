@@ -70,3 +70,4 @@ print(f"Exercise 6(c): Root = {root6_c:.5f} in {iters6_c} iterations")
 g6_d = lambda x: np.cos(x)
 root6_d, iters6_d = fixed_point(g6_d, 0.5, tol=1e-5)
 print(f"Exercise 6(d): Root = {root6_d:.5f} in {iters6_d} iterations")
+
