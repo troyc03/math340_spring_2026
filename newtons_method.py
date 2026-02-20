@@ -36,8 +36,8 @@ def newtons_method_iterative(f, df, x0, tol, max_iterations=1000):
     print(f"Warning: Newton's method did not converge within {max_iterations} iterations.")
     return x
 
-f = lambda x: x**2 - 2
-f_prime = lambda x: 2*x
+f = lambda x: np.exp(x)-x
+f_prime = lambda x: np.exp(x)-1
 
 estimate = newtons_method_iterative(f, f_prime, 1.5, 1e-6)
 print()
