@@ -126,21 +126,40 @@ def newton_method(guess, tol=1e-5):
         p_n = p_next
     return p_n
 
+# Secant method for comparison
+def secant_method(x0, x1, tol=1e-5):
+    for i in range(100):
+        f_x0 = f(x0)
+        f_x1 = f(x1)
+        if f_x1 - f_x0 == 0:
+            print("Zero difference in function values, cannot continue.")
+            return None
+        x2 = x1 - f_x1 * (x1 - x0) / (f_x1 - f_x0)
+        if abs(x2 - x1) < tol:
+            return x2
+        x0, x1 = x1, x2
+    return x1
+
 # Calculation
 lambda_root = newton_method(0.1)
+lambda_secant = secant_method(0.1, 0.2)
 print(f"Approximation for lambda: {lambda_root:.5f}")
+print(f"Secant method approximation for lambda: {lambda_secant:.5f}")
 
 # Plot results
 lam_values = np.linspace(0.01, 0.5, 100)
 f_values = [f(lam) for lam in lam_values]
+plt.subplots(figsize=(10, 6))
 plt.plot(lam_values, f_values, label='f(lambda)')
 plt.axhline(0, color='red', linestyle='--', label='Zero Line')
-plt.scatter(lambda_root, 0, color='green', label=f'Solution: {lambda_root:.5f}')
-plt.axvline(x=lambda_root, color='blue', linestyle='--', label=f'lambda={lambda_root:.5f}')
-plt.scatter([0.1], [f(0.1)], color='orange', label='Initial Guess')
-plt.title('Function f(lambda) for Exercise 5')
+plt.axhline(0, color='red', linestyle='--')
+plt.axvline(lambda_root, color='green', linestyle='--', label=f'Newton lambda: {lambda_root:.5f}')
+plt.axvline(lambda_secant, color='orange', linestyle='--', label=f'Secant lambda: {lambda_secant:.5f}')
+plt.scatter(lambda_root, f(lambda_root), color='green', label=f'Newton Solution: {lambda_root:.5f}')
+plt.scatter(lambda_secant, f(lambda_secant), color='orange', label=f'Secant Solution: {lambda_secant:.5f}')
 plt.xlabel('lambda')
 plt.ylabel('f(lambda)')
+plt.title('Finding lambda for Exercise 5')
 plt.legend()
 plt.grid(True)
 plt.show()
