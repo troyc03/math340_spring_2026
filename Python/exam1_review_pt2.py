@@ -72,6 +72,7 @@ def P(t):
 print(f"c: {c:.5f}, k: {k:.5f}")
 print(f"P(30) (1980): {P(30):.5f}")
 print(f"P(60) (2010): {P(60):.5f}")
+print('-' * 50)
 
 # Plot results
 import numpy as np
